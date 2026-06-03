@@ -1,0 +1,22 @@
+# Rust / Solana build artifacts
+target/
+**/*.rs.bk
+*.so
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local keys / secrets — never commit
+*.json
+!Cargo.json
+id.json
+keypair*.json
+*.key
+.env
+
+# OS
+.DS_Store
+Thumbs.db

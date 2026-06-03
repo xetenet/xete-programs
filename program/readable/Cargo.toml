@@ -1,0 +1,22 @@
+[package]
+name = "xete-tab-readable"
+version = "0.1.0"
+edition = "2021"
+description = "xete-tab — non-custodial confidential settlement (human-readable solana-program reference): deposit / claim (hidden beneficiary) / reclaim"
+license = "MIT"
+
+# Isolate from any parent workspace manifest.
+[workspace]
+
+[dependencies]
+solana-program = "4.0.0"
+solana-system-interface = { version = "3", features = ["bincode"] }
+borsh = { version = "1", features = ["derive"] }
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[profile.release]
+overflow-checks = true   # lamports math
+lto = "fat"
+codegen-units = 1

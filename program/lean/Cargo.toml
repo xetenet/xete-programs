@@ -1,0 +1,21 @@
+[package]
+name = "xete-tab"
+version = "0.1.0"
+edition = "2021"
+description = "xete-tab — non-custodial confidential settlement for Solana (Pinocchio / no_std lean build; deployed on-chain)"
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+pinocchio = { version = "0.11", features = ["cpi"] }
+pinocchio-system = "0.6"
+solana-nostd-sha256 = "0.2"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1

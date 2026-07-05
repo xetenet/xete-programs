@@ -31,9 +31,12 @@ solana-verify verify-from-repo -um \
 Add `--remote` to also submit the result to the public
 [OtterSec verified-builds](https://verify.osec.io) registry.
 
-**Toolchain note.** These crates pull an `edition2024` dependency, so the build needs
-Rust ≥ 1.85. If your `solana-verify` default image is older, pass a matching `--base-image`.
-Every program commits its `Cargo.lock`, so the dependency graph is deterministic.
+**Toolchain.** The mainnet programs were built with **Agave `solana-cli 4.0.0`,
+`cargo 1.96`, `platform-tools v1.53`** (`rustc 1.89`). A byte-identical `solana-verify`
+build needs a base image carrying that toolchain — pass `--base-image` if your
+`solana-verify` default is older (its stock image predates Agave 4.0 and can't parse the
+`edition2024` transitive dependency). Every program commits its `Cargo.lock`, so the
+dependency graph is pinned.
 
 ## Layout
 

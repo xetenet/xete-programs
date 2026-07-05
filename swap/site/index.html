@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xete swap — sovereign agent-to-agent settlement</title>
+<style>
+  :root{
+    --bg:#101117; --panel:#14151c; --brass:#c9a86a; --brass-lt:#e3cd9a; --brass-dk:#9a7b46;
+    --ink:#eae7e0; --muted:#9b978c; --faint:#6f6c64; --line:rgba(201,168,106,.20);
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --fs-title:54px; --fs-h:21px; --fs-body:16px; --fs-small:13px;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ overflow-x:hidden; max-width:100%; }
+  body{ background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6;
+        -webkit-font-smoothing:antialiased; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  a{ color:inherit; text-decoration:none; }
+  .label{ font-size:11px; font-weight:600; letter-spacing:3.5px; text-transform:uppercase; color:var(--brass); }
+  .deco{ display:flex; align-items:center; justify-content:center; gap:14px; color:var(--brass); margin:0 auto; }
+  .deco::before,.deco::after{ content:""; height:1px; width:90px; background:linear-gradient(90deg,transparent,var(--brass)); }
+  .deco::after{ background:linear-gradient(90deg,var(--brass),transparent); }
+  .deco .dia{ font-size:10px; }
+  .wrap{ max-width:1040px; margin:0 auto; padding:0 40px; }
+
+  header{ position:absolute; top:0; left:0; right:0; z-index:5; display:flex; align-items:center; justify-content:space-between; padding:26px 40px; }
+  .logo{ font-size:20px; font-weight:800; letter-spacing:6px; color:var(--ink); }
+  .logo b{ color:var(--brass); }
+  nav{ display:flex; align-items:center; gap:24px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+  nav .req{ border:1px solid var(--brass); color:var(--brass-lt); padding:9px 18px; }
+
+  .hero{ position:relative; min-height:100vh;
+         background:radial-gradient(ellipse at 50% 0%, #1b1c24 0%, #0d0e13 60%, #0a0b0f 100%);
+         display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:120px 32px 70px; }
+  .hero .label{ margin-bottom:28px; }
+  .hero h1{ font-family:var(--serif); font-weight:400; line-height:1.08; letter-spacing:-.5px; max-width:17ch; }
+  .hero h1 em{ font-style:italic; color:var(--brass-lt); }
+  .hero .sub{ color:var(--muted); font-size:17px; max-width:600px; margin:26px auto 0; line-height:1.7; }
+  .hero .cta{ margin-top:38px; display:inline-block; border:1px solid var(--brass); color:var(--brass-lt);
+              padding:14px 32px; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; }
+  .scroll{ position:absolute; bottom:26px; color:var(--brass-dk); letter-spacing:2px; font-size:11px; text-transform:uppercase; }
+
+  section.wrap{ padding:64px 40px 0; }
+  .center{ text-align:center; }
+  .thesis{ max-width:780px; margin:0 auto; font-family:var(--serif); font-size:25px; line-height:1.55; }
+  .thesis b{ color:var(--brass-lt); font-weight:400; }
+
+  .triptych{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:44px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .col{ padding:36px 28px; text-align:center; border-left:1px solid var(--line); }
+  .col:first-child{ border-left:none; }
+  .col h3{ font-family:var(--serif); font-weight:400; font-size:var(--fs-h); margin-bottom:12px; }
+  .col p{ color:var(--muted); font-size:14.5px; }
+
+  .guards{ max-width:820px; margin:30px auto 0; }
+  .guard{ display:flex; gap:16px; align-items:flex-start; padding:16px 0; border-bottom:1px solid var(--line); }
+  .guard .mk{ color:var(--brass); font-family:var(--serif); font-size:18px; line-height:1.3; }
+  .guard h4{ font-weight:600; font-size:15.5px; margin-bottom:3px; }
+  .guard p{ color:var(--muted); font-size:14px; }
+
+  .proof{ max-width:880px; margin:40px auto 0; display:flex; flex-wrap:wrap; gap:16px 38px; justify-content:center; }
+  .proof .item{ font-size:14px; color:var(--muted); } .proof b{ color:var(--ink); font-weight:600; }
+
+  .uses{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:40px; }
+  .use{ background:var(--panel); border:1px solid var(--line); padding:28px 24px; }
+  .use .label{ display:block; margin-bottom:10px; }
+  .use h3{ font-family:var(--serif); font-weight:400; font-size:19px; margin-bottom:9px; }
+  .use p{ color:var(--muted); font-size:13.5px; }
+
+  .finale{ text-align:center; padding:96px 32px 84px; margin-top:64px; border-top:1px solid var(--line); }
+  .finale h2{ font-family:var(--serif); font-weight:400; font-size:42px; letter-spacing:-.4px; }
+  .finale .cta{ margin-top:30px; display:inline-block; background:var(--brass); color:#161109; font-weight:700;
+                padding:15px 36px; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; }
+
+  footer{ border-top:1px solid var(--line); padding:26px 40px; display:flex; flex-wrap:wrap; gap:12px 24px;
+          align-items:center; justify-content:space-between; font-size:12px; letter-spacing:1px; color:var(--faint); }
+  footer .l b{ color:var(--brass); }
+
+  .hero h1, .finale h2{ font-size:var(--fs-title); }
+
+  @media (max-width:820px){
+    :root{ --fs-title:34px; --fs-h:19px; }
+    header{ padding:18px 20px; } nav a:not(.req){ display:none; }
+    .wrap{ padding:0 22px; } .triptych,.uses{ grid-template-columns:1fr; }
+    .col{ border-left:none; border-top:1px solid var(--line); } .col:first-child{ border-top:none; }
+    section.wrap{ padding:48px 22px 0; }
+  }
+
+  /* ── print → clean multi-page PDF ── */
+  @page{ size:Letter; margin:0; }
+  @media print{
+    :root{ --fs-title:38px; --fs-h:18px; }
+    header{ position:static; padding:18px 54px 0; } nav .req{ display:none; } .scroll{ display:none; }
+    .hero{ min-height:0; padding:22px 54px 26px; background:var(--bg); }
+    .hero .label{ margin-bottom:14px; }
+    .hero h1{ font-size:34px; } .hero .sub{ margin-top:16px; } .hero .cta{ display:none; }
+    .wrap{ max-width:none; padding:0 54px; } section.wrap{ padding:26px 54px 0; }
+    .thesis{ font-size:21px; }
+    .triptych{ margin-top:24px; } .col{ padding:26px 20px; }
+    .finale{ padding:60px 32px; margin-top:48px; } .finale .cta{ display:none; }
+    .sec, .builtfor, .finale{ break-before:page; }
+    .builtfor{ padding-top:84px; }
+    .triptych,.col,.use,.guard{ break-inside:avoid; }
+    .uses{ gap:16px; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">XE<b>T</b>E</div>
+    <nav><span>swap</span><a href="#" class="req">Request a conversation</a></nav>
+  </header>
+
+  <!-- hero -->
+  <section class="hero">
+    <div class="label">Agent-to-agent settlement</div>
+    <h1>Two assets. One transaction.<br><em>Or nothing.</em></h1>
+    <p class="sub">xete swap lets autonomous agents trade one token for another directly — settled
+      on-chain in a single atomic step, with no middleman ever holding the funds.</p>
+    <a href="#" class="cta">Request a conversation</a>
+    <div class="scroll">↓ &nbsp; Continue</div>
+  </section>
+
+  <!-- thesis -->
+  <section class="wrap center">
+    <p class="thesis">A trade is <b>both halves or neither</b>. The assets never rest in anyone's
+      hands but the program's, and the swap finalizes in the time it takes an agent to act —
+      no counterparty to trust, no company to ask.</p>
+  </section>
+
+  <!-- three pillars -->
+  <section class="wrap center">
+    <div class="triptych">
+      <div class="col"><h3>Fast</h3><p>Sub-second finality: swaps settle inside a single action.</p></div>
+      <div class="col"><h3>Atomic</h3><p>All-or-nothing settlement: no one ever left hanging.</p></div>
+      <div class="col"><h3>Sovereign</h3><p>Assets sit in a vault singularly owned by the governing program.</p></div>
+    </div>
+  </section>
+
+  <!-- security -->
+  <section class="wrap center sec">
+    <div class="label">Built to be attacked</div>
+    <p class="thesis" style="font-size:21px; margin-top:18px; max-width:680px;">We assume every
+      party is hostile — buyer, seller, and any stranger calling in. The program is the only
+      trusted actor, and it is the one thing that can't be impersonated.</p>
+    <div class="guards" style="text-align:left;">
+      <div class="guard"><span class="mk">◆</span><div><h4>Funds can't be redirected</h4>
+        <p>Every payout is verified to reach the rightful party before it moves. There is no path
+          that pays the wrong account.</p></div></div>
+      <div class="guard"><span class="mk">◆</span><div><h4>Terms can't be switched</h4>
+        <p>A bid is locked to exactly what it agreed to buy. A seller can't quietly swap the goods
+          out from under a standing offer.</p></div></div>
+      <div class="guard"><span class="mk">◆</span><div><h4>Trades can't be replayed</h4>
+        <p>A settlement happens once and closes itself out. There is no stale, half-open state
+          left behind to double-spend.</p></div></div>
+      <div class="guard"><span class="mk">◆</span><div><h4>Nothing is left stranded</h4>
+        <p>Every trade cleans up after itself — the on-chain deposit returns with the funds, so
+          nothing decays or sits abandoned.</p></div></div>
+    </div>
+    <div class="proof">
+      <span class="item"><b>Proven, not asserted</b> — every known attack rejected on a live test network</span>
+      <span class="item"><b>99</b> checks green, adversarial + happy-path</span>
+      <span class="item"><b>Lean by design</b> — a minimal, auditable on-chain program</span>
+    </div>
+  </section>
+
+  <!-- built for -->
+  <section class="wrap center builtfor">
+    <div class="label">Built for</div>
+    <div class="uses">
+      <div class="use"><span class="label">Idle balances</span><h3>Compute into revenue</h3>
+        <p>Turn a stagnant on-chain balance into USDC — sell excess capacity the moment it's idle,
+          at a price you set.</p></div>
+      <div class="use"><span class="label">Agent treasuries</span><h3>Rebalance, autonomously</h3>
+        <p>An agent shifts its own holdings between assets directly, without a desk, a bridge, or a
+          human in the loop.</p></div>
+      <div class="use"><span class="label">Machine markets</span><h3>Agent-to-agent trade</h3>
+        <p>Thousands of agents quoting, bidding, and settling with each other — every trade a real,
+          final on-chain transaction.</p></div>
+    </div>
+  </section>
+
+  <!-- finale -->
+  <div class="finale">
+    <div class="label">Sovereign by default</div>
+    <h2 style="margin-top:12px;">Don't trust it. Verify it.</h2>
+    <a href="#" class="cta">Request a conversation</a>
+    <div class="deco" style="margin-top:50px;"><span class="dia">◆</span></div>
+  </div>
+
+  <footer>
+    <div class="l">XE<b>T</b>E &nbsp;·&nbsp; swap — agent-to-agent settlement</div>
+    <div>◉ in development</div>
+  </footer>
+
+</body>
+</html>

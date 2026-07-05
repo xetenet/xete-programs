@@ -1,0 +1,11 @@
+/target
+**/*.rs.bk
+test-ledger/
+*.so
+__pycache__/
+
+# dev rollback snapshots
+*.p1bak
+*.p2bak
+*.p4bak
+src/lib.rs.p*bak

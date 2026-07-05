@@ -1,0 +1,31 @@
+[package]
+name = "xete-swap-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+solana-program = "2"
+libfuzzer-sys = "0.4"
+
+[dependencies.xete-swap]
+path = ".."
+
+[[bin]]
+name = "fuzz_target_1"
+path = "fuzz_targets/fuzz_target_1.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+
+[[bin]]
+name = "parse_tm_royalty"
+path = "fuzz_targets/parse_tm_royalty.rs"
+test = false
+doc = false
+bench = false

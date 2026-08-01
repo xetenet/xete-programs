@@ -1,8 +1,8 @@
-# xete-swap (skunkworks)
+# xete-swap
 
 Rung 1 of the agent marketplace: **atomic SPL-token ⇄ token settlement** — e.g. an
 agent sells excess on-chain compute tokens for USDC, trustlessly, both legs or neither.
-Separate from `xete-tab` (the SOL settlement contract); its own private repo.
+Separate from the settlement program (`program/`), which handles SOL settlement.
 
 Lean **Pinocchio** (`no_std`, zero heap, hand-laid byte layout), same house style and
 release profile as `xete-escrow-pin`. **Single file by design** (`src/lib.rs`) so it
@@ -14,12 +14,14 @@ audits top-to-bottom.
 - [x] `cancel_swap` — maker reclaims before any fill
 - [x] `expire` — permissionless refund after the deadline
 - [x] `make_offer` / `accept_offer` / `withdraw_offer` / `expire_offer` — the bid/offer queue
-- [x] `S_TAKER` private/targeted swaps (named-counterparty OTC)
+- [ ] `S_TAKER` private/targeted swaps (named-counterparty OTC) — layout reserved,
+      NOT yet enforced; today every swap is fillable by any taker
+      (see `THREAT_MODEL.md` → Known gaps)
 - [x] validator suites: **happy 48/48 + adversarial 51/51**
 - [x] **P0 PDA-reuse rug found & fixed** (terms-pinned offers + slippage) — see `THREAT_MODEL.md`
 
 Open backlog (see `THREAT_MODEL.md` → Known gaps): `expire_offer`, CU optimization,
-`S_TAKER` private swaps, the protocol-fee hook, native-SOL legs.
+`S_TAKER` private swaps, native-SOL legs.
 
 ## Security
 - `THREAT_MODEL.md` / `THREAT_MODEL.html` — attack→mitigation matrix (A–G) + honest gaps.
@@ -41,7 +43,3 @@ Open backlog (see `THREAT_MODEL.md` → Known gaps): `expire_offer`, CU optimiza
 cargo build-sbf          # build the program
 bash run_swap_test.sh    # deploy to a local validator + run both suites
 ```
-
-## Gate / scope
-Skunkworks + for-profit marketplace horizon. **Validator only** — do not deploy; not
-grant scope. Designs route through the lead / John before any mainnet.

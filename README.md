@@ -40,9 +40,8 @@ dependency graph is pinned.
 
 ## Layout
 
-- **`swap/`** — the OTC / sealed-order program (upgradeable; upgrade authority).
-  Specs: [`swap/THREAT_MODEL.md`](swap/THREAT_MODEL.md), [`swap/EVENTS.md`](swap/EVENTS.md),
-  [`swap/ROYALTY_SPEC.md`](swap/ROYALTY_SPEC.md).
+- **`swap/`** — the OTC / sealed-order program (upgradeable).
+  Specs: [`swap/THREAT_MODEL.md`](swap/THREAT_MODEL.md), [`swap/EVENTS.md`](swap/EVENTS.md).
 - **`program/`** — the settlement program: `lean/` is the deployed build, `readable/` an
   annotated reference. See [`SPEC.md`](SPEC.md) and [`SETTLEMENT.md`](SETTLEMENT.md).
 

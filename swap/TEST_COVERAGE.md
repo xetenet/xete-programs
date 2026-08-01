@@ -1,17 +1,14 @@
 # xete-swap — test coverage
 
-Two suites run against a local `solana-test-validator`. One command does deploy + mint +
-fund + run both:
+Two suites run against a local `solana-test-validator` (deploy + mint + fund + run both).
+The harness itself is part of the private development repo and is not published here;
+this file is the public record of what it asserts.
 
-```
-bash run_swap_test.sh
-```
-
-- **`tests/swap_test.py` — 41/41** — happy paths + the rug regression + slippage + guards.
-- **`tests/adversarial.py` — 42/42** — every client-triggerable threat-matrix row, asserted
+- **happy-path suite — 41/41** — happy paths + the rug regression + slippage + guards.
+- **adversarial suite — 42/42** — every client-triggerable threat-matrix row, asserted
   to **reject**.
 
-## Happy path (`swap_test.py`)
+## Happy path
 
 | Flow | What it proves |
 |------|----------------|
@@ -24,7 +21,7 @@ bash run_swap_test.sh
 | **slippage** | `fill` with `max_want` too low, or wrong `expect_give` → **rejected** |
 | **guards** | zero-give open, already-expired open → **rejected** |
 
-## Adversarial must-reject (`adversarial.py`)
+## Adversarial must-reject
 
 | # | Attack | Asserted |
 |---|--------|----------|

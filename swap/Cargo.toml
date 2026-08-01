@@ -2,7 +2,7 @@
 name = "xete-swap"
 version = "0.1.0"
 edition = "2021"
-description = "xete-swap — rung 1: atomic SPL-token <-> token settlement (e.g. compute-token <-> USDC). Skunkworks. Native solana-program (review-legible)."
+description = "xete-swap — rung 1: atomic SPL-token <-> token settlement (e.g. compute-token <-> USDC). Native solana-program (review-legible)."
 license = "MIT"
 
 [workspace]

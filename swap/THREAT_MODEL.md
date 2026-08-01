@@ -134,13 +134,13 @@ succeeds) and asserts the `accept` is rejected.
 
 ## Test coverage
 
-Two validator suites, both green — run with `bash run_swap_test.sh`:
+Two validator suites, both green (the harness is part of the private development repo):
 
-- **`tests/swap_test.py` — 41/41.** Positive paths for all seven instructions, the rug
+- **happy-path suite — 41/41.** Positive paths for all seven instructions, the rug
   regression, fill-slippage rejects, and the input guards.
-- **`tests/adversarial.py` — 42/42.** Every client-triggerable row asserted to **reject**:
+- **adversarial suite — 42/42.** Every client-triggerable row asserted to **reject**:
   A1–A4, B1–B4, C1–C3, D1, E1–E2, E4, plus the guards. The non-triggerable rows (C4
   permissionless-by-design, E3 re-entrancy, F1 overflow, G1–G3 races/spam/CU) are
-  documented in that file, not asserted.
+  documented in that suite, not asserted.
 
 Row-by-row mapping in **`TEST_COVERAGE.md`**.

@@ -4,9 +4,9 @@ Rung 1 of the agent marketplace: **atomic SPL-token ⇄ token settlement** — e
 agent sells excess on-chain compute tokens for USDC, trustlessly, both legs or neither.
 Separate from the settlement program (`program/`), which handles SOL settlement.
 
-Lean **Pinocchio** (`no_std`, zero heap, hand-laid byte layout), same house style and
-release profile as `xete-escrow-pin`. **Single file by design** (`src/lib.rs`) so it
-audits top-to-bottom.
+Native **solana-program** (no framework), hand-laid byte layout, `overflow-checks` on in
+release: what runs on chain is exactly what you read. One domain per module under `src/`
+so it audits top-to-bottom.
 
 ## Status — all seven instructions live, validator-verified
 - [x] `open_swap` — escrow the give-leg into a program-owned vault + post terms
@@ -24,7 +24,7 @@ Open backlog (see `THREAT_MODEL.md` → Known gaps): `expire_offer`, CU optimiza
 `S_TAKER` private swaps, native-SOL legs.
 
 ## Security
-- `THREAT_MODEL.md` / `THREAT_MODEL.html` — attack→mitigation matrix (A–G) + honest gaps.
+- `THREAT_MODEL.md` — attack→mitigation matrix (A–G) + honest gaps.
 - `TEST_COVERAGE.md` — every matrix row mapped to its must-reject assertion.
 - Standing defenses: owner check · PDA re-derivation · recipient binding · `TransferChecked`.
 
@@ -41,5 +41,9 @@ Open backlog (see `THREAT_MODEL.md` → Known gaps): `expire_offer`, CU optimiza
 ## Build & test
 ```
 cargo build-sbf          # build the program
-bash run_swap_test.sh    # deploy to a local validator + run both suites
+cargo test               # host unit tests (parsers, wire layouts, split math)
 ```
+
+The local-validator integration harness that runs the two suites is part of the private
+development repo and is not published here; what it asserts is recorded in
+[`TEST_COVERAGE.md`](TEST_COVERAGE.md).
